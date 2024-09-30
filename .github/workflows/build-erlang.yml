@@ -77,12 +77,26 @@ jobs:
         with:
           name: erlang-source
 
-      - name: Build Erlang (dummy)
-        run: echo "Hello world!" > erlang-${{ github.event.inputs['erlang-version'] }}-build-linux.tar.gz
+      # Note that the use of --prefix instead of DESTDIR is because it seems
+      # that the Erlang build system does not support DESTDIR well.
+      - name: Build Erlang
+        run: |
+          apt-get update
+          apt-get install -y autoconf gcc g++ make libncurses5-dev libssl-dev
+          apt-get install -y unixodbc-dev
+          tar -xzf erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+          cd otp_src_${{ github.event.inputs['erlang-version'] }}
+          ./configure --prefix=/tmp/erlang-install --without-wx --without-jinterface
+          make
+          make install
+          cd ..
+          cp -r /tmp/erlang-install otp_build_${{ github.event.inputs['erlang-version'] }}
+          tar -czf erlang-${{ github.event.inputs['erlang-version'] }}-build-linux.tar.gz otp_build_${{ github.event.inputs['erlang-version'] }}
 
       - name: Upload build to S3 storage
         if: ${{ github.event.inputs['upload-builds'] == 'true' }}
         run: |
+          apt-get install -y wget
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
           ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
