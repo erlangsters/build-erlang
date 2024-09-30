@@ -57,3 +57,55 @@ jobs:
         with:
           name: erlang-source
           path: erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+
+  build-linux:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:12
+    needs: download-erlang
+    steps:
+      - name: Download Erlang source tarball
+        uses: actions/download-artifact@v4
+        with:
+          name: erlang-source
+
+      - name: Build Erlang (dummy)
+        run: echo "Hello world!"
+
+  build-linux-musl:
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:3
+    needs: download-erlang
+    steps:
+      - name: Download Erlang source tarball
+        uses: actions/download-artifact@v4
+        with:
+          name: erlang-source
+
+      - name: Build Erlang (dummy)
+        run: echo "Hello world!"
+
+  build-macos:
+    runs-on: macos-latest
+    needs: download-erlang
+    steps:
+      - name: Download Erlang source tarball
+        uses: actions/download-artifact@v4
+        with:
+          name: erlang-source
+
+      - name: Build Erlang (dummy)
+        run: echo "Hello world!"
+
+  build-windows:
+    runs-on: windows-latest
+    needs: download-erlang
+    steps:
+      - name: Download Erlang source tarball
+        uses: actions/download-artifact@v4
+        with:
+          name: erlang-source
+
+      - name: Build Erlang (dummy)
+        run: echo "Hello world!"
