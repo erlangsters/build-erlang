@@ -1,8 +1,32 @@
 name: Build Erlang
 
 on:
-  push:
-    branches: ["master"]
+  workflow_dispatch:
+    inputs:
+      erlang-version:
+        description: 'Erlang version to build'
+        required: true
+      upload-source:
+        description: 'Upload source to S3 storage'
+        required: true
+        type: boolean
+        default: true
+      upload-builds:
+        description: 'Upload builds to S3 storage'
+        required: true
+        type: boolean
+        default: true
+      s3-storage-endpoint:
+        description: 'URL endpoint of the S3 storage.'
+        required: true
+        default: 'https://storage.byteplug.io'
+      s3-bucket-name:
+        description: 'Name of the S3 bucket'
+        required: true
+        default: 'erlangsters'
+      s3-path-prefix:
+        description: 'Path prefix within the S3 bucket'
+        default: '.'
 
 jobs:
   build-erlang:
