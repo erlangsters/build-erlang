@@ -78,7 +78,13 @@ jobs:
           name: erlang-source
 
       - name: Build Erlang (dummy)
-        run: echo "Hello world!"
+        run: echo "Hello world!" > erlang-${{ github.event.inputs['erlang-version'] }}-build-linux.tar.gz
+
+      - name: Upload Erlang build tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: erlang-build-linux
+          path: erlang-${{ github.event.inputs['erlang-version'] }}-build-linux.tar.gz
 
   build-linux-musl:
     runs-on: ubuntu-latest
@@ -92,7 +98,13 @@ jobs:
           name: erlang-source
 
       - name: Build Erlang (dummy)
-        run: echo "Hello world!"
+        run: echo "Hello world!" > erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl.tar.gz
+
+      - name: Upload Erlang build tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: erlang-build-linux-musl
+          path: erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl.tar.gz
 
   build-macos:
     runs-on: macos-latest
@@ -104,7 +116,14 @@ jobs:
           name: erlang-source
 
       - name: Build Erlang (dummy)
-        run: echo "Hello world!"
+        run: echo "Hello world!" > erlang-${{ github.event.inputs['erlang-version'] }}-build-macos.tar.gz
+
+
+      - name: Upload Erlang build tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: erlang-build-macos
+          path: erlang-${{ github.event.inputs['erlang-version'] }}-build-macos.tar.gz
 
   build-windows:
     runs-on: windows-latest
@@ -116,4 +135,10 @@ jobs:
           name: erlang-source
 
       - name: Build Erlang (dummy)
-        run: echo "Hello world!"
+        run: echo "Hello world!" > erlang-${{ github.event.inputs['erlang-version'] }}-build-windows.tar.gz
+
+      - name: Upload Erlang build tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: erlang-build-windows
+          path: erlang-${{ github.event.inputs['erlang-version'] }}-build-windows.tar.gz
