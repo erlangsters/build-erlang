@@ -1,0 +1,13 @@
+name: Build Erlang
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  build-erlang:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Erlang
+        run: |
+          echo "Hello world!"
