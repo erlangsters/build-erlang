@@ -52,6 +52,14 @@ jobs:
           path: erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
           key: erlang-${{ github.event.inputs['erlang-version'] }}
 
+      - name: Upload source to S3 storage
+        if: ${{ github.event.inputs['upload-source'] == 'true' }}
+        run: |
+          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x mc
+          ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
+          ./mc cp erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/source/erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+
       - name: Upload Erlang source tarball
         uses: actions/upload-artifact@v4
         with:
