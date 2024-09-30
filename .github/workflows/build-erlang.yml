@@ -32,7 +32,22 @@ jobs:
   download-erlang:
     runs-on: ubuntu-latest
     steps:
+      - name: Restore downloaded Erlang source tarball
+        id: cache-erlang
+        uses: actions/cache@v4
+        with:
+          path: erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+          key: erlang-${{ github.event.inputs['erlang-version'] }}
+
       - name: Download Erlang source tarball
+        if: steps.cache-erlang.outputs.cache-hit != 'true'
         run: |
           wget https://erlang.org/download/otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
           mv otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+
+      - name: Cache downloaded Erlang source tarball
+        if: steps.cache-erlang.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+          key: erlang-${{ github.event.inputs['erlang-version'] }}
