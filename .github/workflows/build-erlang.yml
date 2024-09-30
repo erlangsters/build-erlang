@@ -29,9 +29,10 @@ on:
         default: '.'
 
 jobs:
-  build-erlang:
+  download-erlang:
     runs-on: ubuntu-latest
     steps:
-      - name: Build Erlang
+      - name: Download Erlang source tarball
         run: |
-          echo "Hello world!"
+          wget https://erlang.org/download/otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
+          mv otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
