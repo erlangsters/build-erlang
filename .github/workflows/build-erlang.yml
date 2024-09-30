@@ -51,3 +51,9 @@ jobs:
         with:
           path: erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
           key: erlang-${{ github.event.inputs['erlang-version'] }}
+
+      - name: Upload Erlang source tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: erlang-source
+          path: erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
