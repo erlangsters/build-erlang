@@ -80,6 +80,14 @@ jobs:
       - name: Build Erlang (dummy)
         run: echo "Hello world!" > erlang-${{ github.event.inputs['erlang-version'] }}-build-linux.tar.gz
 
+      - name: Upload build to S3 storage
+        if: ${{ github.event.inputs['upload-builds'] == 'true' }}
+        run: |
+          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x mc
+          ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
+          ./mc cp erlang-${{ github.event.inputs['erlang-version'] }}-build-linux.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux.tar.gz
+
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
@@ -100,6 +108,14 @@ jobs:
       - name: Build Erlang (dummy)
         run: echo "Hello world!" > erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl.tar.gz
 
+      - name: Upload build to S3 storage
+        if: ${{ github.event.inputs['upload-builds'] == 'true' }}
+        run: |
+          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x mc
+          ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
+          ./mc cp erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux-musl/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl.tar.gz
+
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
@@ -118,6 +134,13 @@ jobs:
       - name: Build Erlang (dummy)
         run: echo "Hello world!" > erlang-${{ github.event.inputs['erlang-version'] }}-build-macos.tar.gz
 
+      - name: Upload build to S3 storage
+        if: ${{ github.event.inputs['upload-builds'] == 'true' }}
+        run: |
+          wget https://dl.min.io/client/mc/release/darwin-arm64/mc
+          chmod +x mc
+          ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
+          ./mc cp erlang-${{ github.event.inputs['erlang-version'] }}-build-macos.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/macos/erlang-${{ github.event.inputs['erlang-version'] }}-build-macos.tar.gz
 
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
@@ -136,6 +159,14 @@ jobs:
 
       - name: Build Erlang (dummy)
         run: echo "Hello world!" > erlang-${{ github.event.inputs['erlang-version'] }}-build-windows.tar.gz
+
+      - name: Upload build to S3 storage
+        if: ${{ github.event.inputs['upload-builds'] == 'true' }}
+        run: |
+          Invoke-WebRequest -Uri https://dl.min.io/client/mc/release/windows-amd64/mc.exe -OutFile mc.exe
+          chmod +x mc.exe
+          ./mc.exe alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
+          ./mc.exe cp erlang-${{ github.event.inputs['erlang-version'] }}-build-windows.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/windows/erlang-${{ github.event.inputs['erlang-version'] }}-build-windows.tar.gz
 
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
