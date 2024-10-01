@@ -156,8 +156,16 @@ jobs:
         with:
           name: erlang-source
 
-      - name: Build Erlang (dummy)
-        run: echo "Hello world!" > erlang-${{ github.event.inputs['erlang-version'] }}-build-macos.tar.gz
+      - name: Build Erlang
+        run: |
+          tar -xzf erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+          cd otp_src_${{ github.event.inputs['erlang-version'] }}
+          ./configure --prefix=/tmp/erlang-install --without-wx --without-jinterface --without-odbc
+          make
+          make install
+          cd ..
+          cp -r /tmp/erlang-install otp_build_${{ github.event.inputs['erlang-version'] }}
+          tar -czf erlang-${{ github.event.inputs['erlang-version'] }}-build-macos.tar.gz otp_build_${{ github.event.inputs['erlang-version'] }}
 
       - name: Upload build to S3 storage
         if: ${{ github.event.inputs['upload-builds'] == 'true' }}
