@@ -99,12 +99,12 @@ jobs:
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
           ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
-          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux.tar.gz
+          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-amd64.tar.gz
 
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
-          name: erlang-build-linux
+          name: erlang-build-linux-amd64
           path: otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
   build-linux-musl:
@@ -138,12 +138,12 @@ jobs:
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
           ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
-          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux-musl/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl.tar.gz
+          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl-amd64.tar.gz
 
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
-          name: erlang-build-linux-musl
+          name: erlang-build-linux-musl-amd64
           path: otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
   build-macos:
@@ -172,12 +172,12 @@ jobs:
           wget https://dl.min.io/client/mc/release/darwin-arm64/mc
           chmod +x mc
           ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
-          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/macos/erlang-${{ github.event.inputs['erlang-version'] }}-build-macos.tar.gz
+          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/macos/erlang-${{ github.event.inputs['erlang-version'] }}-build-macos-arm64.tar.gz
 
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
-          name: erlang-build-macos
+          name: erlang-build-macos-arm64
           path: otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
   build-windows:
@@ -198,10 +198,10 @@ jobs:
           Invoke-WebRequest -Uri https://dl.min.io/client/mc/release/windows-amd64/mc.exe -OutFile mc.exe
           chmod +x mc.exe
           ./mc.exe alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
-          ./mc.exe cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/windows/erlang-${{ github.event.inputs['erlang-version'] }}-build-windows.tar.gz
+          ./mc.exe cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/windows/erlang-${{ github.event.inputs['erlang-version'] }}-build-windows-amd64.tar.gz
 
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
-          name: erlang-build-windows
+          name: erlang-build-windows-amd64
           path: otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz
