@@ -66,10 +66,15 @@ jobs:
           path: otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
   build-linux:
-    runs-on: ubuntu-latest
+    needs: download-erlang
+    strategy:
+      matrix:
+        # Add 'arm64' to the list of architectures if you have a ARM64 runner
+        # available.
+        arch: [amd64] # [amd64, arm64]
+    runs-on: ${{ matrix.arch == 'arm64' && 'linux-arm64' || 'ubuntu-latest' }}
     container:
       image: debian:12
-    needs: download-erlang
     steps:
       - name: Download Erlang source tarball
         uses: actions/download-artifact@v4
@@ -96,22 +101,27 @@ jobs:
         if: ${{ github.event.inputs['upload-builds'] == 'true' }}
         run: |
           apt-get install -y wget
-          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          wget https://dl.min.io/client/mc/release/linux-${{ matrix.arch }}/mc
           chmod +x mc
           ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
-          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-amd64.tar.gz
+          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-${{ matrix.arch }}.tar.gz
 
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
-          name: erlang-build-linux-amd64
+          name: erlang-build-linux-${{ matrix.arch }}
           path: otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
   build-linux-musl:
-    runs-on: ubuntu-latest
+    needs: download-erlang
+    strategy:
+      matrix:
+        # Add 'arm64' to the list of architectures if you have a ARM64 runner
+        # available.
+        arch: [amd64] # [amd64, arm64]
+    runs-on: ${{ matrix.arch == 'arm64' && 'linux-arm64' || 'ubuntu-latest' }}
     container:
       image: alpine:3
-    needs: download-erlang
     steps:
       - name: Download Erlang source tarball
         uses: actions/download-artifact@v4
@@ -135,15 +145,15 @@ jobs:
       - name: Upload build to S3 storage
         if: ${{ github.event.inputs['upload-builds'] == 'true' }}
         run: |
-          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          wget https://dl.min.io/client/mc/release/linux-${{ matrix.arch }}/mc
           chmod +x mc
           ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
-          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl-amd64.tar.gz
+          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl-${{ matrix.arch }}.tar.gz
 
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
-          name: erlang-build-linux-musl-amd64
+          name: erlang-build-linux-musl-${{ matrix.arch }}
           path: otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
   build-macos:
