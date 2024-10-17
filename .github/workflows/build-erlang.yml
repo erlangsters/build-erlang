@@ -36,20 +36,19 @@ jobs:
         id: cache-erlang
         uses: actions/cache@v4
         with:
-          path: erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+          path: otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
           key: erlang-${{ github.event.inputs['erlang-version'] }}
 
       - name: Download Erlang source tarball
         if: steps.cache-erlang.outputs.cache-hit != 'true'
         run: |
           wget https://erlang.org/download/otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
-          mv otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
 
       - name: Cache downloaded Erlang source tarball
         if: steps.cache-erlang.outputs.cache-hit != 'true'
         uses: actions/cache@v4
         with:
-          path: erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+          path: otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
           key: erlang-${{ github.event.inputs['erlang-version'] }}
 
       - name: Upload source to S3 storage
@@ -58,13 +57,13 @@ jobs:
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
           ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
-          ./mc cp erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/source/erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+          ./mc cp otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/source/erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
 
       - name: Upload Erlang source tarball
         uses: actions/upload-artifact@v4
         with:
           name: erlang-source
-          path: erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+          path: otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
   build-linux:
     runs-on: ubuntu-latest
@@ -84,14 +83,14 @@ jobs:
           apt-get update
           apt-get install -y autoconf gcc g++ make libncurses5-dev libssl-dev
           apt-get install -y unixodbc-dev
-          tar -xzf erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+          tar -xzf otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
           cd otp_src_${{ github.event.inputs['erlang-version'] }}
           ./configure --prefix=/tmp/erlang-install --without-wx --without-jinterface
           make
           make install
           cd ..
-          cp -r /tmp/erlang-install otp_build_${{ github.event.inputs['erlang-version'] }}
-          tar -czf erlang-${{ github.event.inputs['erlang-version'] }}-build-linux.tar.gz otp_build_${{ github.event.inputs['erlang-version'] }}
+          mv /tmp/erlang-install otp_build_${{ github.event.inputs['erlang-version'] }}
+          tar -czf otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz otp_build_${{ github.event.inputs['erlang-version'] }}
 
       - name: Upload build to S3 storage
         if: ${{ github.event.inputs['upload-builds'] == 'true' }}
@@ -100,13 +99,13 @@ jobs:
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
           ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
-          ./mc cp erlang-${{ github.event.inputs['erlang-version'] }}-build-linux.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux.tar.gz
+          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux.tar.gz
 
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
           name: erlang-build-linux
-          path: erlang-${{ github.event.inputs['erlang-version'] }}-build-linux.tar.gz
+          path: otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
   build-linux-musl:
     runs-on: ubuntu-latest
@@ -124,14 +123,14 @@ jobs:
           apk update
           apk add --no-cache autoconf gcc g++ make ncurses-dev openssl-dev
           apk add --no-cache unixodbc-dev
-          tar -xzf erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+          tar -xzf otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
           cd otp_src_${{ github.event.inputs['erlang-version'] }}
           ./configure --prefix=/tmp/erlang-install --without-wx --without-jinterface
           make
           make install
           cd ..
-          cp -r /tmp/erlang-install otp_build_${{ github.event.inputs['erlang-version'] }}
-          tar -czf erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl.tar.gz otp_build_${{ github.event.inputs['erlang-version'] }}
+          mv /tmp/erlang-install otp_build_${{ github.event.inputs['erlang-version'] }}
+          tar -czf otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz otp_build_${{ github.event.inputs['erlang-version'] }}
 
       - name: Upload build to S3 storage
         if: ${{ github.event.inputs['upload-builds'] == 'true' }}
@@ -139,13 +138,13 @@ jobs:
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
           ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
-          ./mc cp erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux-musl/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl.tar.gz
+          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/linux-musl/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl.tar.gz
 
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
           name: erlang-build-linux-musl
-          path: erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl.tar.gz
+          path: otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
   build-macos:
     runs-on: macos-latest
@@ -158,14 +157,14 @@ jobs:
 
       - name: Build Erlang
         run: |
-          tar -xzf erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
+          tar -xzf otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
           cd otp_src_${{ github.event.inputs['erlang-version'] }}
           ./configure --prefix=/tmp/erlang-install --without-wx --without-jinterface --without-odbc
           make
           make install
           cd ..
-          cp -r /tmp/erlang-install otp_build_${{ github.event.inputs['erlang-version'] }}
-          tar -czf erlang-${{ github.event.inputs['erlang-version'] }}-build-macos.tar.gz otp_build_${{ github.event.inputs['erlang-version'] }}
+          mv /tmp/erlang-install otp_build_${{ github.event.inputs['erlang-version'] }}
+          tar -czf otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz otp_build_${{ github.event.inputs['erlang-version'] }}
 
       - name: Upload build to S3 storage
         if: ${{ github.event.inputs['upload-builds'] == 'true' }}
@@ -173,13 +172,13 @@ jobs:
           wget https://dl.min.io/client/mc/release/darwin-arm64/mc
           chmod +x mc
           ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
-          ./mc cp erlang-${{ github.event.inputs['erlang-version'] }}-build-macos.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/macos/erlang-${{ github.event.inputs['erlang-version'] }}-build-macos.tar.gz
+          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/macos/erlang-${{ github.event.inputs['erlang-version'] }}-build-macos.tar.gz
 
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
           name: erlang-build-macos
-          path: erlang-${{ github.event.inputs['erlang-version'] }}-build-macos.tar.gz
+          path: otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
   build-windows:
     runs-on: windows-latest
@@ -191,7 +190,7 @@ jobs:
           name: erlang-source
 
       - name: Build Erlang (dummy)
-        run: echo "Hello world!" > erlang-${{ github.event.inputs['erlang-version'] }}-build-windows.tar.gz
+        run: echo "Hello world!" > otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
       - name: Upload build to S3 storage
         if: ${{ github.event.inputs['upload-builds'] == 'true' }}
@@ -199,10 +198,10 @@ jobs:
           Invoke-WebRequest -Uri https://dl.min.io/client/mc/release/windows-amd64/mc.exe -OutFile mc.exe
           chmod +x mc.exe
           ./mc.exe alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
-          ./mc.exe cp erlang-${{ github.event.inputs['erlang-version'] }}-build-windows.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/windows/erlang-${{ github.event.inputs['erlang-version'] }}-build-windows.tar.gz
+          ./mc.exe cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/build/windows/erlang-${{ github.event.inputs['erlang-version'] }}-build-windows.tar.gz
 
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
           name: erlang-build-windows
-          path: erlang-${{ github.event.inputs['erlang-version'] }}-build-windows.tar.gz
+          path: otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz
