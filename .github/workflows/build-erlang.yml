@@ -90,9 +90,9 @@ jobs:
           apt-get install -y unixodbc-dev
           tar -xzf otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
           cd otp_src_${{ github.event.inputs['erlang-version'] }}
-          ./configure --prefix=/tmp/erlang-install --without-wx --without-jinterface
+          ./configure --without-wx --without-jinterface
           make
-          make install
+          make RELEASE_ROOT=/tmp/erlang-install release
           cd ..
           mv /tmp/erlang-install otp_build_${{ github.event.inputs['erlang-version'] }}
           tar -czf otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz otp_build_${{ github.event.inputs['erlang-version'] }}
@@ -135,9 +135,9 @@ jobs:
           apk add --no-cache unixodbc-dev
           tar -xzf otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
           cd otp_src_${{ github.event.inputs['erlang-version'] }}
-          ./configure --prefix=/tmp/erlang-install --without-wx --without-jinterface
+          ./configure --without-wx --without-jinterface
           make
-          make install
+          make RELEASE_ROOT=/tmp/erlang-install release
           cd ..
           mv /tmp/erlang-install otp_build_${{ github.event.inputs['erlang-version'] }}
           tar -czf otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz otp_build_${{ github.event.inputs['erlang-version'] }}
@@ -169,9 +169,9 @@ jobs:
         run: |
           tar -xzf otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
           cd otp_src_${{ github.event.inputs['erlang-version'] }}
-          ./configure --prefix=/tmp/erlang-install --without-wx --without-jinterface --without-odbc
+          ./configure --without-wx --without-jinterface --without-odbc
           make
-          make install
+          make RELEASE_ROOT=/tmp/erlang-install release
           cd ..
           mv /tmp/erlang-install otp_build_${{ github.event.inputs['erlang-version'] }}
           tar -czf otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz otp_build_${{ github.event.inputs['erlang-version'] }}
