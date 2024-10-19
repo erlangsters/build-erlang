@@ -42,7 +42,7 @@ jobs:
       - name: Download Erlang source tarball
         if: steps.cache-erlang.outputs.cache-hit != 'true'
         run: |
-          wget https://erlang.org/download/otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
+          wget https://github.com/erlang/otp/releases/download/OTP-${{ github.event.inputs['erlang-version'] }}/otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
       - name: Cache downloaded Erlang source tarball
         if: steps.cache-erlang.outputs.cache-hit != 'true'
