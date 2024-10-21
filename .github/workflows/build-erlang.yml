@@ -69,10 +69,8 @@ jobs:
     needs: download-erlang
     strategy:
       matrix:
-        # Add 'arm64' to the list of architectures if you have a ARM64 runner
-        # available.
-        arch: [amd64] # [amd64, arm64]
-    runs-on: ${{ matrix.arch == 'arm64' && 'linux-arm64' || 'ubuntu-latest' }}
+        arch: [amd64, arm64]
+    runs-on: ${{ matrix.arch == 'arm64' && 'linux-arm64' || 'linux-amd64' }}
     container:
       image: debian:12
     steps:
@@ -116,10 +114,8 @@ jobs:
     needs: download-erlang
     strategy:
       matrix:
-        # Add 'arm64' to the list of architectures if you have a ARM64 runner
-        # available.
-        arch: [amd64] # [amd64, arm64]
-    runs-on: ${{ matrix.arch == 'arm64' && 'linux-arm64' || 'ubuntu-latest' }}
+        arch: [amd64, arm64]
+    runs-on: ${{ matrix.arch == 'arm64' && 'linux-arm64' || 'linux-amd64' }}
     container:
       image: alpine:3
     steps:
