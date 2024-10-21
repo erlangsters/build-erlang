@@ -156,7 +156,7 @@ jobs:
           ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl-${{ matrix.arch }}.tar.gz
 
   build-macos:
-    runs-on: macos-latest
+    runs-on: macos-14
     needs: download-erlang
     steps:
       - name: Download Erlang source tarball
@@ -195,7 +195,7 @@ jobs:
     defaults:
       run:
         shell: wsl-bash {0}
-    runs-on: windows-latest
+    runs-on: windows-2022
     needs: download-erlang
     steps:
       - name: Set up WSL (Ubuntu 18.04)
