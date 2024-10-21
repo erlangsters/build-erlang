@@ -114,7 +114,10 @@ jobs:
     needs: download-erlang
     strategy:
       matrix:
-        arch: [amd64, arm64]
+        # Builds for ARM64 is disabled because JavaScript actions are not
+        # supported on Alpine ARM64 (for instance, actions/download-artifact@v4
+        # will not work).
+        arch: [amd64] # [amd64, arm64]
     runs-on: ${{ matrix.arch == 'arm64' && 'linux-arm64' || 'linux-amd64' }}
     container:
       image: alpine:3
