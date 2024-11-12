@@ -65,7 +65,7 @@ jobs:
           ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
           ./mc cp otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
 
-  build-linux:
+  build-debian:
     needs: download-erlang
     strategy:
       matrix:
@@ -98,7 +98,7 @@ jobs:
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
-          name: erlang-build-linux-${{ matrix.arch }}
+          name: erlang-build-debian-${{ matrix.arch }}
           path: otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
       - name: Upload build to S3 storage
@@ -108,9 +108,9 @@ jobs:
           wget https://dl.min.io/client/mc/release/linux-${{ matrix.arch }}/mc
           chmod +x mc
           ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
-          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-${{ matrix.arch }}.tar.gz
+          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/erlang-${{ github.event.inputs['erlang-version'] }}-build-debian-${{ matrix.arch }}.tar.gz
 
-  build-linux-musl:
+  build-alpine:
     needs: download-erlang
     strategy:
       matrix:
@@ -144,7 +144,7 @@ jobs:
       - name: Upload Erlang build tarball
         uses: actions/upload-artifact@v4
         with:
-          name: erlang-build-linux-musl-${{ matrix.arch }}
+          name: erlang-build-alpine-${{ matrix.arch }}
           path: otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz
 
       - name: Upload build to S3 storage
@@ -153,7 +153,7 @@ jobs:
           wget https://dl.min.io/client/mc/release/linux-${{ matrix.arch }}/mc
           chmod +x mc
           ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
-          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/erlang-${{ github.event.inputs['erlang-version'] }}-build-linux-musl-${{ matrix.arch }}.tar.gz
+          ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/erlang-${{ github.event.inputs['erlang-version'] }}-build-alpine-${{ matrix.arch }}.tar.gz
 
   build-macos:
     runs-on: macos-14
