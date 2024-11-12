@@ -37,10 +37,14 @@ completion of the workflow (if successful).
 
 It uses the Github-hosted runner to build Erlang for the following platforms.
 
-- Linux with glibc as libc (AMD64 and ARM64)
-- Linux with musl as libc (AMD64 and ARM64)
+- Debian (AMD64 and ARM64)
+- Alpine (AMD64 and ARM64)
 - macOS (ARM64 only)
 - Windows (AMD64 only)
+
+While 'Debian' and 'Alpine' are specific Linux distributions, we're using these
+terms to broadly represent Linux systems built on either the glibc or musl C
+library.
 
 Note that you must create two large runners called `linux-amd64` and
 `linux-arm64` for the Linux builds.
@@ -62,10 +66,10 @@ The workflow will produce downloadable artifacts (from Github) that are named
 using the following.
 
 - `erlang-source` - The
-- `erlang-build-linux-amd64`
-- `erlang-build-linux-musl-amd64`
-- `erlang-build-linux-arm64` (if enabled)
-- `erlang-build-linux-musl-arm64` (if enabled)
+- `erlang-build-debian-amd64`
+- `erlang-build-debian-arm64` (if enabled)
+- `erlang-build-alpine-amd64`
+- `erlang-build-alpine-arm64` (if enabled)
 - `erlang-build-macos-arm64`
 - `erlang-build-window-amd64`
 
@@ -114,7 +118,7 @@ based on what's commonly needed by the community.
 
 Builds are produced for the following platforms.
 
-- Linux (AMD64 and ARM64)
+- Linux (glibc and musl, AMD64 and ARM64)
 - macOS (ARM64)
 - Windows (AMD64)
 
