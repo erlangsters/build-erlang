@@ -85,16 +85,15 @@ following Action secrets to your repository.
 - `S3_BUCKET_ACCESS_KEY`
 - `S3_BUCKET_SECRET_KEY`
 
-All artifacts will be uploaded in the `/erlang/<version>/` folder in the S3
-buckets and have the following naming.
+All artifacts will be uploaded in the `/<path-prefix>/<version>/` folder in the
+S3 bucket and have the following naming. (Note that the path prefix can be `.`
+which means it will result in the `/<version/` folder.)
 
 - `erlang-<version>-source.tar.gz` (for the source tarball)
 - `erlang-<version>-build-<platform>.tar.gz`
 
 Where the naming scheme of `platform` value is
 `<linux|linux-musl|macos|windows>-<amd64|amd64>`.
-
-XXX: The 'path prefix' value in the workflow inputs is not supported yet.
 
 ## Version availability
 
