@@ -1,6 +1,6 @@
-# Build Erlang
+# Build Erlang/OTP
 
-This repository contains a Github Actions workflow to build Erlang from its
+This repository contains a Github Actions workflow to build Erlang/OTP from its
 source files. By default, it uploads the build artifacts to the Erlangsters
 [S3 bucket](https://storage.erlangsters.org/erlang/) but it can be customized
 to send them to your own S3 bucket.
@@ -9,20 +9,17 @@ to send them to your own S3 bucket.
 
 Artifacts produced by this workflow are kept in a S3 bucket and are made
 available to the community. It's also used by this Github
-[JavaScript action](https://github.com/erlangsters/setup-erlang) to set up Erlang
-on your Github runners.
+[JavaScript action](https://github.com/erlangsters/setup-erlang) to set up
+Erlang/OTP on your Github runners.
 
-Written by the Erlangsters [community](https://www.erlangsters.org/) and
+Written by the Erlangsters [community](https://about.erlangsters.org/) and
 released under the MIT [license](/https://opensource.org/license/mit).
-
-XXX: Compute MD5 and upload them
-XXX: Include build logs in the archives
 
 ## How to use
 
 Unless you want to maintain your own builds of Erlang (or perhaps make some
-experiments), you don't need this Erlang builder. But in the case you do, start
-with forking this repository on Github.
+experiments), you don't need this "Erlang builder". But in the case you do,
+start with forking this repository on Github.
 
 On Github, head to the "Actions" tab and select the "Build Erlang" workflow.
 From there, you are able to trigger the Github Actions workflow with the
@@ -54,10 +51,10 @@ application is only included in Linux builds. See the
 [platforms](#platform-availability) section below for platform-specific
 information.
 
-The supported Erlang versions and how support evolves over time is explained in
-the [version availability](#version-availability) section.
+The supported Erlang/OTP versions and how support evolves over time is
+explained in the [version availability](#version-availability) section.
 
-The source files of Erlang are taken directly from Github
+The source files of Erlang/OTP are taken directly from Github
 (https://github.com/erlang/otp/releases) as published by the Erlang/OTP team.
 
 ## Build (and source) artifacts
