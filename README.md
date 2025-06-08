@@ -2,12 +2,12 @@
 
 This repository contains a Github Actions workflow to build Erlang from its
 source files. By default, it uploads the build artifacts to the Erlangsters
-[S3 storage](https://storage.erlangsters.org/erlang/) but it can be customized
-to send them to your own S3 storage.
+[S3 bucket](https://storage.erlangsters.org/erlang/) but it can be customized
+to send them to your own S3 bucket.
 
 ![Github Workflow Inputs](./workflow-inputs.png)
 
-Artifacts produced by this workflow are kept in a S3 storage and are made
+Artifacts produced by this workflow are kept in a S3 bucket and are made
 available to the community. It's also used by this Github
 [JavaScript action](https://github.com/erlangsters/setup-erlang) to set up Erlang
 on your Github runners.
@@ -29,8 +29,8 @@ From there, you are able to trigger the Github Actions workflow with the
 following inputs.
 
 - The Erlang version to build
-- Whether you want the artifacts uploaded to a S3 storage
-- The parameters of the targeted S3 storage
+- Whether you want the artifacts uploaded to a S3 bucket
+- The parameters of the targeted S3 bucket
 
 Click "Run workflow" and the result will be made available as artifacts after
 completion of the workflow (if successful).
@@ -76,17 +76,17 @@ using the following.
 Inside the archives, you will always find a folder named `otp_src_<version>`
 for the source archive, and `otp_build_<version>` for the build archives.
 
-## S3 storage
+## S3 bucket
 
-If uploading the artifacts to a S3 storage is needed, enable it by ticking the
-"Upload it to source/builds storage" checkbox, then the workflow will do the
+If uploading the artifacts to a S3 bucket is needed, enable it by ticking the
+"Upload to source/builds S3 bucket" checkbox, then the workflow will do the
 uploading.
 
 However, it requires write permission which can be given by adding the
 following Action secrets to your repository.
 
-- `S3_STORAGE_ACCESS_KEY`
-- `S3_STORAGE_SECRET_KEY`
+- `S3_BUCKET_ACCESS_KEY`
+- `S3_BUCKET_SECRET_KEY`
 
 All artifacts will be uploaded in the `/erlang/<version>/` folder in the S3
 buckets and have the following naming.

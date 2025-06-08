@@ -7,17 +7,17 @@ on:
         description: 'Erlang version to build'
         required: true
       upload-source:
-        description: 'Upload source to S3 storage'
+        description: 'Upload source to S3 bucket'
         required: true
         type: boolean
         default: true
       upload-builds:
-        description: 'Upload builds to S3 storage'
+        description: 'Upload builds to S3 bucket'
         required: true
         type: boolean
         default: true
-      s3-storage-endpoint:
-        description: 'URL endpoint of the S3 storage.'
+      s3-url-endpoint:
+        description: 'URL endpoint of the S3 service'
         required: true
         default: 'https://storage.byteplug.io'
       s3-bucket-name:
@@ -62,7 +62,7 @@ jobs:
         run: |
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
-          ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
+          ./mc alias set target ${{ github.event.inputs['s3-url-endpoint'] }} ${{ secrets.S3_BUCKET_ACCESS_KEY }} ${{ secrets.S3_BUCKET_SECRET_KEY }}
           ./mc cp otp_src_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/erlang-${{ github.event.inputs['erlang-version'] }}-source.tar.gz
 
   build-debian:
@@ -107,7 +107,7 @@ jobs:
           apt-get install -y wget
           wget https://dl.min.io/client/mc/release/linux-${{ matrix.arch }}/mc
           chmod +x mc
-          ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
+          ./mc alias set target ${{ github.event.inputs['s3-url-endpoint'] }} ${{ secrets.S3_BUCKET_ACCESS_KEY }} ${{ secrets.S3_BUCKET_SECRET_KEY }}
           ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/erlang-${{ github.event.inputs['erlang-version'] }}-build-debian-${{ matrix.arch }}.tar.gz
 
   build-alpine:
@@ -152,7 +152,7 @@ jobs:
         run: |
           wget https://dl.min.io/client/mc/release/linux-${{ matrix.arch }}/mc
           chmod +x mc
-          ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
+          ./mc alias set target ${{ github.event.inputs['s3-url-endpoint'] }} ${{ secrets.S3_BUCKET_ACCESS_KEY }} ${{ secrets.S3_BUCKET_SECRET_KEY }}
           ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/erlang-${{ github.event.inputs['erlang-version'] }}-build-alpine-${{ matrix.arch }}.tar.gz
 
   build-macos:
@@ -186,7 +186,7 @@ jobs:
         run: |
           wget https://dl.min.io/client/mc/release/darwin-arm64/mc
           chmod +x mc
-          ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
+          ./mc alias set target ${{ github.event.inputs['s3-url-endpoint'] }} ${{ secrets.S3_BUCKET_ACCESS_KEY }} ${{ secrets.S3_BUCKET_SECRET_KEY }}
           ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/erlang-${{ github.event.inputs['erlang-version'] }}-build-macos-arm64.tar.gz
 
   # This job was heavily taken from the upstream Github Actions workflow
@@ -244,5 +244,5 @@ jobs:
         run: |
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
-          ./mc alias set target ${{ github.event.inputs['s3-storage-endpoint'] }} ${{ secrets.S3_STORAGE_ACCESS_KEY }} ${{ secrets.S3_STORAGE_SECRET_KEY }}
+          ./mc alias set target ${{ github.event.inputs['s3-url-endpoint'] }} ${{ secrets.S3_BUCKET_ACCESS_KEY }} ${{ secrets.S3_BUCKET_SECRET_KEY }}
           ./mc cp otp_build_${{ github.event.inputs['erlang-version'] }}.tar.gz target/${{ github.event.inputs['s3-bucket-name'] }}/erlang/${{ github.event.inputs['erlang-version'] }}/erlang-${{ github.event.inputs['erlang-version'] }}-build-windows-amd64.tar.gz
