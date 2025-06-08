@@ -105,11 +105,12 @@ All software has a lifespan and it would be ridiculous to insist in maintaining
 support for versions of Erlang/OTP when they get old. Therefore, as time
 passes, support for those versions are simply dropped.
 
-The current supported Erlang/OTP versions are:
+The current supported versions are:
 
-- Erlang 25.x
-- Erlang 26.x
-- Erlang 27.x
+- Erlang/OTP 25.x
+- Erlang/OTP 26.x
+- Erlang/OTP 27.x
+- Erlang/OTP 28.x
 
 No rule is defined to decide on those supported versions. It's simply decided
 based on what's commonly needed by the community.
