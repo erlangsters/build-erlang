@@ -4,18 +4,19 @@ on:
   workflow_dispatch:
     inputs:
       erlang-version:
-        description: 'Erlang version to build'
+        description: 'Erlang/OTP version to build'
         required: true
+        default: '28.0'
       upload-source:
-        description: 'Upload source to S3 bucket'
+        description: 'Upload source to a S3 bucket'
         required: true
         type: boolean
-        default: true
+        default: false
       upload-builds:
-        description: 'Upload builds to S3 bucket'
+        description: 'Upload builds to a S3 bucket'
         required: true
         type: boolean
-        default: true
+        default: false
       s3-url-endpoint:
         description: 'URL endpoint of the S3 service'
         required: true
@@ -27,6 +28,10 @@ on:
       s3-path-prefix:
         description: 'Path prefix within the S3 bucket'
         default: 'erlang-otp'
+  # Build the latest version of Erlang/OTP every Monday without uploading the
+  # artifacts.
+  schedule:
+    - cron: '0 0 * * 1'
 
 jobs:
   download-erlang:
