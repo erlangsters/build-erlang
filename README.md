@@ -89,8 +89,8 @@ All artifacts will be uploaded in the `/<path-prefix>/<version>/` folder in the
 S3 bucket and have the following naming. (Note that the path prefix can be `.`
 which means it will result in the `/<version/` folder.)
 
-- `erlang-<version>-source.tar.gz` (for the source tarball)
-- `erlang-<version>-build-<platform>.tar.gz`
+- `erlang-otp-<version>-source.tar.gz` (for the source tarball)
+- `erlang-otp-<version>-build-<platform>.tar.gz`
 
 Where the naming scheme of `platform` value is
 `<linux|linux-musl|macos|windows>-<amd64|amd64>`.
