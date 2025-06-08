@@ -2,8 +2,8 @@
 
 This repository contains a Github Actions workflow to build Erlang/OTP from its
 source files. By default, it uploads the build artifacts to the Erlangsters
-[S3 bucket](https://storage.erlangsters.org/erlang/) but it can be customized
-to send them to your own S3 bucket.
+[S3 bucket](https://erlangsters.hel1.your-objectstorage.com) but it can be
+customized to send them to your own S3 bucket.
 
 ![Github Workflow Inputs](./workflow-inputs.png)
 
@@ -17,9 +17,9 @@ released under the MIT [license](/https://opensource.org/license/mit).
 
 ## How to use
 
-Unless you want to maintain your own builds of Erlang (or perhaps make some
-experiments), you don't need this "Erlang builder". But in the case you do,
-start with forking this repository on Github.
+Unless you want to maintain your own builds (or perhaps make some experiments),
+you don't need this "Erlang builder". But in the case you do, start with
+forking this repository on Github.
 
 On Github, head to the "Actions" tab and select the "Build Erlang" workflow.
 From there, you are able to trigger the Github Actions workflow with the

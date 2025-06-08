@@ -19,14 +19,14 @@ on:
       s3-url-endpoint:
         description: 'URL endpoint of the S3 service'
         required: true
-        default: 'https://storage.byteplug.io'
+        default: 'https://hel1.your-objectstorage.com'
       s3-bucket-name:
         description: 'Name of the S3 bucket'
         required: true
         default: 'erlangsters'
       s3-path-prefix:
         description: 'Path prefix within the S3 bucket'
-        default: '.'
+        default: 'erlang-otp'
 
 jobs:
   download-erlang:
